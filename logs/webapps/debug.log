@@ -1,0 +1,4 @@
+2020-09-25 19:44:27:303 [http-nio-8080-exec-4] DEBUG com.mini.dao.AreaDao.selectAll - ==>  Preparing: select * from tb_area order by priority desc
+2020-09-25 19:44:27:332 [http-nio-8080-exec-4] DEBUG com.mini.dao.AreaDao.selectAll - ==> Parameters: 
+2020-09-25 19:44:27:361 [http-nio-8080-exec-4] DEBUG com.mini.dao.AreaDao.selectAll - <==      Total: 2
+2020-09-25 19:44:27:369 [http-nio-8080-exec-4] DEBUG com.mini.controller.AreaController - costTime:[737ms]

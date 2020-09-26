@@ -1,0 +1,6 @@
+2020-09-26 10:22:54:533 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_des = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
+2020-09-26 10:25:01:685 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_des = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
+2020-09-26 10:25:01:712 [main] DEBUG com.mini.dao.ShopDao.update - ==> Parameters: 测试update(String), testupdate(String), 2020-09-26 10:25:01.315(Timestamp), 1(Integer), test(String), 12(Long), 42(Long)
+2020-09-26 10:25:38:952 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_desc = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
+2020-09-26 10:25:38:977 [main] DEBUG com.mini.dao.ShopDao.update - ==> Parameters: 测试update(String), testupdate(String), 2020-09-26 10:25:38.593(Timestamp), 1(Integer), test(String), 12(Long), 42(Long)
+2020-09-26 10:25:38:984 [main] DEBUG com.mini.dao.ShopDao.update - <==    Updates: 1
