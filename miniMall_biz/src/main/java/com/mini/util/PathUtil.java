@@ -12,18 +12,26 @@ public class PathUtil {
     public static String getImgBasePath() {
         String os = System.getProperty("os.name");
         String basePath = "";
+
         if (os.toLowerCase().startsWith("win")) {
-            basePath = "D:/mini/img";
+            //for window
+            basePath = "D:/mini";
         } else {
-            basePath = "/home/mini/img";
+            //for mac and linux
+            basePath = "/Users/kainingxin/test";
         }
         basePath = basePath.replace("/", separator);
         return basePath;
     }
 
-
+    //floder path for storing images
     public static String getShopImgPath(long shopId) {
         String imgPath = "/upload/item/shop/" + shopId + "/";
+        return imgPath.replace("/", separator);
+    }
+
+    public static String getProductImgPath(long productId){
+        String imgPath = "/upload/item/product/" + productId+ "/";
         return imgPath.replace("/", separator);
     }
 }

@@ -1,6 +1,7 @@
 package com.mini.dao;
 
 import com.mini.entity.Shop;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -14,13 +15,19 @@ import java.util.List;
  **/
 @Repository("shopDao")
 public interface ShopDao {
-    void insert(Shop shop);
+    int insert(Shop shop);
 
-    void update(Shop shop);
+    int update(Shop shop);
 
     void delete(Shop shop);
 
     Shop select(Long shopId);
-
-    List<Shop> selectAll();
+    /**
+    * @Parame: [shopCondition, rowIndex, pageSize]
+    * @description: 
+    * @return: java.util.List<com.mini.entity.Shop>
+    * @author: xin kaining
+    * @Date 2020/10/2
+    **/
+    List<Shop> selectList(@Param("shopCondition") Shop shopCondition);
 }

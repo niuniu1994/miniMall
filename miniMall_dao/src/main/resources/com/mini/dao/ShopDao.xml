@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mini.dao.ShopDao">
+
+    <resultMap id="shop" type="com.mini.entity.Shop" autoMapping="true">
+        <id property="shopId" column="shop_id" javaType="java.lang.Long"/>
+
+        <association property="area" column="area_id" javaType="Area">
+            <id column="area_id" property="areaId"/>
+            <result column="area_name" property="areaName"/>
+        </association>
+        <association property="shopCategory" column="shop_category" javaType="ShopCategory">
+            <id column="shop_category_id" property="shopCategoryId"/>
+            <result column="shop_category_name" property="shopCategoryName"/>
+        </association>
+        <association property="owner" column="owner_id" javaType="PersonInfo">
+            <id column="owner_id" property="userId"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
     <insert id="insert" parameterType="Shop" useGeneratedKeys="true" keyProperty="shopId" keyColumn="shop_id">
         insert into tb_shop(owner_id, area_id, shop_category_id, shop_name, shop_desc, shop_addr, phone, shop_img,
                             priority,
@@ -27,5 +45,54 @@
         </set>
         where shop_id = #{shopId}
     </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete
+        from tb_shop
+        where shop_id = #{id}
+    </delete>
+
+    <select id="select" parameterType="java.lang.Long" resultMap="shop">
+        select s.*, tsc.shop_category_name, ta.area_name, tpi.name
+        from tb_shop s
+                 left join tb_shop_category tsc on tsc.shop_category_id = s.shop_category_id
+                 left join tb_area ta on ta.area_id = s.area_id
+                 left join tb_person_info tpi on tpi.user_id = s.owner_id
+        where shop_id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="Shop" resultMap="shop">
+        select s.*, tsc.shop_category_name, ta.area_name, tpi.name
+        from tb_shop s
+        left join tb_shop_category tsc on tsc.shop_category_id = s.shop_category_id
+        left join tb_area ta on ta.area_id = s.area_id
+        left join tb_person_info tpi on tpi.user_id = s.owner_id
+        <where>
+            <if test="shopCondition.shopCategory != null and shopCondition.shopCategory.shopCategoryId != null">
+                and s.shop_category_id = #{shopCondition.shopCategory.shopCategoryId}
+            </if>
+            <if test="shopCondition.shopCategory != null
+                and shopCondition.shopCategory.parent!=null
+                and shopCondition.shopCategory.parent.shopCategoryId !=null">
+                and s.shop_category_id in (select shop_category_id from
+                tb_shop_category
+                WHERE parent_id =
+                #{shopCondition.shopCategory.parent.shopCategoryId})
+            </if>
+            <if test="shopCondition.area != null and
+                      shopCondition.area.areaId != null">
+                and s.area_id = #{shopCondition.area.areaId}
+            </if>
+            <if test="shopCondition.shopName != null">
+                and s.shop_name like '%${shopCondition.shopName}%'
+            </if>
+            <if test="shopCondition.enableStatus != null">
+                and s.enable_status = #{shopCondition.enableStatus}
+            </if>
+            <if test="shopCondition.owner != null and shopCondition.owner.userId != null">
+                and s.owner_id = #{shopCondition.owner.userId}
+            </if>
+        </where>
+    </select>
 
 </mapper>

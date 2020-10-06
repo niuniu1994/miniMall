@@ -3,6 +3,7 @@ package com.mini.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -33,8 +34,10 @@ public class Product {
 
 	private Integer point;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
 	private Date createTime;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
 	private Date lastEditTime;
 	// 0.unuable 1.usable
 	private Integer enableStatus;

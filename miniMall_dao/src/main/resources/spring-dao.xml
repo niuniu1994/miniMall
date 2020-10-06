@@ -27,6 +27,18 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="com.mini.entity"/>
         <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helpDialect = mysql
+                            reasonable = true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

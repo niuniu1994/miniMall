@@ -1,4 +1,5 @@
 package com.mini.dao;
+import com.mini.entity.ShopCategory;
 import org.junit.Assert;
 import com.mini.BaseTest;
 import com.mini.entity.Area;
@@ -21,5 +22,6 @@ public class AreaDaoTest extends BaseTest {
     public void testSelectAll(){
         List<Area> list = areaDao.selectAll();
         Assert.assertEquals(2,list.size());
+
     }
 }

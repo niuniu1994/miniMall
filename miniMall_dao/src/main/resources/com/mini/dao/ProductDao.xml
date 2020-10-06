@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mini.dao.ProductDao">
+
+    <resultMap id="product" type="Product" autoMapping="true">
+        <id property="productId" column="product_id" javaType="Long"/>
+        <association property="productCategory" column="product_category_id" javaType="ProductCategory">
+            <id property="productCategoryId" column="product_category_id" javaType="Long"/>
+            <result property="productCategoryName" column="product_category_name" javaType="String"/>
+        </association>
+        <association property="shop" column="shop_id" javaType="Shop">
+            <id property="shopId" column="shop_id" javaType="Long"/>
+            <result property="shopName" column="shop_name" javaType="String"/>
+        </association>
+        <collection property="productImgList"  select="com.mini.dao.ProductImgDao.queryProductImgList" column="product_id"/>
+    </resultMap>
+
+
+    <insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="productId"
+            keyColumn="product_id">
+        insert into tb_product(product_name, product_desc, img_addr, normal_price, promotion_price, priority,
+                               create_time, last_edit_time, enable_status, product_category_id, shop_id, point)
+        VALUES (#{productName}, #{productDesc}, #{imgAddr}, #{normalPrice}, #{promotionPrice}, #{priority},
+                #{createTime}, #{lastEditTime}, #{enableStatus}, #{productCategory.productCategoryId}, #{shop.shopId},
+                #{point})
+    </insert>
+
+    <select id="queryProductById" parameterType="Long" resultMap="product">
+        select p.*, ts.shop_id, ts.shop_name, tpc.product_category_id, tpc.product_category_name
+        from tb_product p
+                 left join tb_product_category tpc on tpc.product_category_id = p.product_category_id
+                 left join tb_shop ts on p.shop_id = ts.shop_id
+        where product_id = #{productId}
+    </select>
+</mapper>

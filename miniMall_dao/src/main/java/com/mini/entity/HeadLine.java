@@ -3,6 +3,7 @@ package com.mini.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -31,8 +32,10 @@ public class HeadLine {
 	// 0. usable 1.unusable
 	private Integer enableStatus;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
 	private Date createTime;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
 	private Date lastEditTime;
 
 }

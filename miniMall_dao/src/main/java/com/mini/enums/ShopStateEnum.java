@@ -13,8 +13,8 @@ import java.util.Arrays;
 
 @Getter
 public enum ShopStateEnum {
-    CHECK(0, "reviewing"), OFFLINE(-1, "Illgel shop"), SUCCESS(1, "Success operation"), PASS(2, "Review passed"),
-    NULL_SHOPID(-1002,"ShopId is null")
+    CHECK(0, "reviewing"), OFFLINE(-1, "Illegel shop"), SUCCESS(1, "Success operation"), PASS(2, "Review passed"),
+    NULL_SHOPID(-1002,"ShopId  null"),NULL_SHOP(-1003,"shop info null"),INNER_ERROR(-1001,"内部系统错误")
     ;
 
     private int state;

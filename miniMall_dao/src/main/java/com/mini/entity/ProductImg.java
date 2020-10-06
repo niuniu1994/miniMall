@@ -3,6 +3,7 @@ package com.mini.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class ProductImg {
 
 	private Integer priority;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
 	private Date createTime;
 
 	private Long productId;
