@@ -18,7 +18,7 @@ public class ShopLoginInterceptor implements HandlerInterceptor {
         PersonInfo user = (PersonInfo) request.getSession().getAttribute("user");
 
         if (user != null){
-            if (user.getUserId() != null && user.getUserId() > 0 && user.getEnableStatus() ==1){
+            if (user.getUserId() != null && user.getUserId() > 0 && user.getEnableStatus() != null &&user.getEnableStatus() ==1){
                 return true;
             }
         }

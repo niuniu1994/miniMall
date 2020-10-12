@@ -29,10 +29,10 @@ import java.util.Map;
 public class ProductCategoryManagementController {
 
     @Resource
-    ProductCategoryBiz productCategoryBiz;
+    private ProductCategoryBiz productCategoryBiz;
 
     @Resource
-    ProductDao productDao;
+    private ProductDao productDao;
 
     @GetMapping("/product_category_list")
     @ResponseBody

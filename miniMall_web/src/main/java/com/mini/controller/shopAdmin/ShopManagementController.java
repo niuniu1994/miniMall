@@ -43,16 +43,16 @@ import java.util.Map;
 public class ShopManagementController {
 
     @Resource
-    ProductCategoryBiz productCategoryBiz;
+    private ProductCategoryBiz productCategoryBiz;
 
     @Resource
-    ShopBiz shopBiz;
+    private ShopBiz shopBiz;
 
     @Resource
-    ShopCategoryBiz shopCategoryBiz;
+    private ShopCategoryBiz shopCategoryBiz;
 
     @Resource
-    AreaBiz areaBiz;
+    private AreaBiz areaBiz;
 
 
 
@@ -87,11 +87,8 @@ public class ShopManagementController {
     public Map<String, Object> getShopList(HttpServletRequest request){
         Map<String, Object> map = new HashMap<>();
 
-        //TODO add user session
 
-        PersonInfo user = new PersonInfo();
-        user.setUserId(1L);
-        request.getSession().setAttribute("user",user);
+        PersonInfo user = (PersonInfo) request.getSession().getAttribute("user");
 
         Shop shopCondition = new Shop();
         shopCondition.setOwner(user);

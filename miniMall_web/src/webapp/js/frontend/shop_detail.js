@@ -45,7 +45,7 @@ $(function () {
                 // 遍历商品列表，生成可以点击搜索相应商品类别下的商品的a标签
                 productCategoryList
                     .map(function (item, index) {
-                        html += '<a href="#" class="button" data-product-search-id='
+                        html += '<a href="#" value="'+item.productCategoryId+'" class="button" data-product-search-id='
                             + item.productCategoryId
                             + '>'
                             + item.productCategoryName
@@ -151,6 +151,7 @@ $(function () {
                     $(e.target).addClass('button-fill').siblings()
                         .removeClass('button-fill');
                 }
+
                 $('.list-div').empty();
                 hasNextPage = true;
                 pageNum = 1;

@@ -89,9 +89,13 @@ public class ProductDaoTest extends BaseDaoTest {
     @Test
     public void testESelectProduct(){
 
-
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setProductCategoryId(15L);
+        Shop shop = new Shop();
+        shop.setShopId(20L);
         Product product = new Product();
-        product.setProductName("test");
+        product.setShop(shop);
+        product.setProductCategory(productCategory);
 
         List<Product> list = productDao.queryProductList(product);
         Assert.assertEquals(0,list.size());

@@ -25,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/superAdmin")
 public class AreaController {
 
-    Logger logger = LoggerFactory.getLogger(AreaController.class);
+    private Logger logger = LoggerFactory.getLogger(AreaController.class);
 
     @Resource
     private AreaBiz areaBiz;

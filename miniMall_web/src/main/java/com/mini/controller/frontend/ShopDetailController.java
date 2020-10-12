@@ -33,16 +33,16 @@ import java.util.Map;
 @RequestMapping("/front_end")
 public class ShopDetailController {
     @Resource
-    ShopBiz shopBiz;
+    private ShopBiz shopBiz;
 
     @Resource
-    ShopCategoryBiz shopCategoryBiz;
+    private ShopCategoryBiz shopCategoryBiz;
 
     @Resource
-    ProductBiz productBiz;
+    private ProductBiz productBiz;
 
     @Resource
-    ProductCategoryBiz productCategoryBiz;
+    private ProductCategoryBiz productCategoryBiz;
 
     @GetMapping("/shop_detail_page_info")
     @ResponseBody
@@ -73,7 +73,7 @@ public class ShopDetailController {
 
         if (pageNum > 0 && shopId > 0) {
 
-            long productCategoryId = HttpServletRequestUtil.getLong(request, "productCategoryName");
+            long productCategoryId = HttpServletRequestUtil.getLong(request, "productCategoryId");
 
             String productName = HttpServletRequestUtil.getString(request, "productName");
 

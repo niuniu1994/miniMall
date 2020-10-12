@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mini.dao.LocalDao">
+
+    <resultMap id="localAuth" type="com.mini.entity.LocalAuth" autoMapping="true">
+        <id property="localAuthId" column="local_auth_id"/>
+        <association property="personInfo" column="user_id" javaType="PersonInfo">
+            <id column="user_id" property="userId" javaType="Long"/>
+            <result column="name" property="name" javaType="String"/>
+            <result column="enable_status" property="enableStatus" javaType="Integer"/>
+            <result column="user_type" property="userType" javaType="Integer"/>
+            <result column="profile_img" property="profileImg" javaType="String"/>
+            <result column="email" property="email" javaType="String"/>
+            <result column="gender" property="gender" javaType="String"/>
+            <result column="create_time" property="createTime" javaType="java.util.Date"/>
+            <result column="last_edit_time" property="lastEditTime" javaType="java.util.Date"/>
+        </association>
+    </resultMap>
+    <insert id="insertLocalAuth"></insert>
+    <update id="updateLocalAuth"></update>
+
+    <select id="queryLocalByUserNameAndPwd" resultMap="localAuth">
+        select la.*, tpi.*
+        from tb_local_auth la left join tb_person_info tpi on tpi.user_id = la.user_id
+        where username = #{username}
+          and password = #{password};
+    </select>
+    <select id="queryLocalByUserId" resultType="com.mini.entity.LocalAuth">
+
+    </select>
+</mapper>
