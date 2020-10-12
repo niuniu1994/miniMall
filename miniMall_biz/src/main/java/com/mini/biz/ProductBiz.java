@@ -1,6 +1,5 @@
 package com.mini.biz;
 
-import com.mini.dto.ImageHolder;
 import com.mini.dto.ProductExecution;
 import com.mini.entity.Product;
 import com.mini.exception.ProductOperationException;
@@ -18,12 +17,10 @@ public interface ProductBiz {
     /**
      * 查询商品列表并分页，可输入的条件有： 商品名（模糊），商品状态，店铺Id,商品类别
      *
-     * @param productCondition
-     * @param pageIndex
-     * @param pageSize
+     * @param product
      * @return
      */
-    ProductExecution getProductList(Product productCondition, int pageIndex, int pageSize);
+    List<Product> getProductList(Product product);
 
     /**
      * 通过商品Id查询唯一的商品信息
@@ -50,10 +47,9 @@ public interface ProductBiz {
      *
      * @param product
      * @param thumbnail
-     * @param productImgHolderList
+     * @param productImgList
      * @return
      * @throws ProductOperationException
-     */
-    ProductExecution modifyProduct(Product product, File thumbnail, List<ImageHolder> productImgHolderList)
+     */ProductExecution modifyProduct(Product product, File thumbnail, List<File> productImgList)
             throws ProductOperationException;
 }

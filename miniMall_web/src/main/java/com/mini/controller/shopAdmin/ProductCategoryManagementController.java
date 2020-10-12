@@ -3,6 +3,7 @@ package com.mini.controller.shopAdmin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mini.biz.ProductCategoryBiz;
+import com.mini.dao.ProductDao;
 import com.mini.dto.ProductCategoryExecution;
 import com.mini.entity.ProductCategory;
 import com.mini.entity.Shop;
@@ -29,6 +30,9 @@ public class ProductCategoryManagementController {
 
     @Resource
     ProductCategoryBiz productCategoryBiz;
+
+    @Resource
+    ProductDao productDao;
 
     @GetMapping("/product_category_list")
     @ResponseBody

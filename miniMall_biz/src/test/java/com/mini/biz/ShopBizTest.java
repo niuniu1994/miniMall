@@ -78,7 +78,7 @@ public class ShopBizTest extends BaseTest {
     public void selectShopList() throws JsonProcessingException {
         ObjectMapper o = new ObjectMapper();
         Shop s = new Shop();
-        s.setShopId(1L);
+        s.setShopName("奶茶");
 
         ShopExecution shop = shopBiz.getShopList(s);
         System.out.println(o.writeValueAsString(shop));

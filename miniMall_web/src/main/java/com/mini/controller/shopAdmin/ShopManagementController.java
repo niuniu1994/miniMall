@@ -1,17 +1,17 @@
 package com.mini.controller.shopAdmin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mini.biz.AreaBiz;
 import com.mini.biz.ProductCategoryBiz;
 import com.mini.biz.ShopBiz;
 import com.mini.biz.ShopCategoryBiz;
-import com.mini.dto.ProductCategoryExecution;
 import com.mini.dto.ShopExecution;
-import com.mini.entity.*;
-import com.mini.enums.ProductCategoryStateEnum;
+import com.mini.entity.Area;
+import com.mini.entity.PersonInfo;
+import com.mini.entity.Shop;
+import com.mini.entity.ShopCategory;
 import com.mini.enums.ShopStateEnum;
 import com.mini.util.CodeUtil;
 import com.mini.util.HttpServletRequestUtil;
@@ -26,7 +26,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: miniMall
@@ -97,6 +100,8 @@ public class ShopManagementController {
             PageHelper.startPage(pageNum, 10);
             List<Shop> shopList = shopBiz.getShopList(shopCondition).getShopList();
             PageInfo pageInfo = new PageInfo<>(shopList);
+
+            request.getSession().setAttribute("shopList",shopList);
 
             map.put("shopList",pageInfo);
             map.put("user", user);

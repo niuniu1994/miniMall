@@ -13,6 +13,7 @@
     http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <import resource="spring-dao.xml"/>
+    <import resource="spring-redis.xml"/>
 
     <context:component-scan base-package="com.mini.biz"/>
     <aop:aspectj-autoproxy/>

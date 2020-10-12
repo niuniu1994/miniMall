@@ -12,7 +12,8 @@
             <id property="shopId" column="shop_id" javaType="Long"/>
             <result property="shopName" column="shop_name" javaType="String"/>
         </association>
-        <collection property="productImgList"  select="com.mini.dao.ProductImgDao.queryProductImgList" column="product_id"/>
+        <collection property="productImgList" select="com.mini.dao.ProductImgDao.queryProductImgList"
+                    column="product_id"/>
     </resultMap>
 
 
@@ -31,5 +32,61 @@
                  left join tb_product_category tpc on tpc.product_category_id = p.product_category_id
                  left join tb_shop ts on p.shop_id = ts.shop_id
         where product_id = #{productId}
+    </select>
+
+    <update id="updateProduct" parameterType="Product">
+        update tb_product
+        <set>
+            <if test="productName != null">product_name=#{productName},</if>
+            <if test="productDesc != null">product_desc=#{productDesc},</if>
+            <if test="imgAddr != null">img_addr=#{imgAddr},</if>
+            <if test="normalPrice != null">normal_price=#{normalPrice},</if>
+            <if test="promotionPrice != null">promotion_price=#{promotionPrice},</if>
+            <if test="priority != null">priority=#{priority},</if>
+            <if test="lastEditTime != null">last_edit_time=#{lastEditTime},</if>
+            <if test="enableStatus != null">enable_status=#{enableStatus},</if>
+            <!--TODO			<if test="point != null">point=#{point},</if>-->
+            <if
+                    test="productCategory != null
+				 and productCategory.productCategoryId != null">
+                product_category_id=#{productCategory.productCategoryId}
+            </if>
+        </set>
+        where product_id=#{productId}
+        and shop_id = #{shop.shopId}
+    </update>
+
+    <delete id="deleteProduct" parameterType="Long">
+        delete
+        from tb_product
+        where product_id = #{productId} and shop_id=#{shop.shopID}
+    </delete>
+
+    <update id="updateProductCategoryToNull" parameterType="Long">
+        update tb_product
+        set product_category_id = null
+        where product_category_id = #{productCategoryId};
+    </update>
+
+    <select id="queryProductList" parameterType="Product" resultMap="product">
+        select p.*, ts.shop_id, ts.shop_name, tpc.product_category_id, tpc.product_category_name
+        from tb_product p
+        left join tb_product_category tpc on tpc.product_category_id = p.product_category_id
+        left join tb_shop ts on p.shop_id = ts.shop_id
+        <where>
+            <if test="shop != null and shop.shopId > 0">
+                and p.shop_id = #{shop.shopId}
+            </if>
+            <if test="productName != null">
+                and product_name like '%${productName}%'
+            </if>
+            <if test="enableStatus != null">
+                and p.enable_status = #{enableStatus}
+            </if>
+            <if test="productCategory != null and productCategory.productCategoryId > 0">
+                and tpc.product_category_id = #{productCategory.productCategoryId}
+            </if>
+        </where>
+        order by priority desc
     </select>
 </mapper>

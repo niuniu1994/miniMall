@@ -1,7 +1,8 @@
 package com.mini.dao;
 
 import com.google.common.collect.Lists;
-import com.mini.BaseTest;
+import com.mini.BaseDaoTest;
+
 import com.mini.entity.ProductCategory;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  **/
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ProductCategoryExecutionTest extends BaseTest {
+public class ProductCategoryExecutionTest extends BaseDaoTest {
     @Resource
     ProductCategoryDao productCategoryDao;
 

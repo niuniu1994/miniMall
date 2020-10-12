@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ShopCategoryBiz {
     List<ShopCategory> getShopCategoryList(ShopCategory shopCategoryCondition);
+
+
 }

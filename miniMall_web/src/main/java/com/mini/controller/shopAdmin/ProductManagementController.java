@@ -1,6 +1,9 @@
 package com.mini.controller.shopAdmin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mini.biz.ProductBiz;
 import com.mini.dao.ProductCategoryDao;
 import com.mini.dto.ProductExecution;
@@ -103,11 +106,11 @@ public class ProductManagementController {
                 product.setShop(shop);
 
                 ProductExecution productExecution = productBiz.addProduct(product, ImageUtil.transferCommonsMultipartFileToFile(thumbnail), productImgList);
-                if (productExecution.getState() == ProductStateEnum.SUCCESS.getState()) {
+                if (productExecution != null && productExecution.getState() == ProductStateEnum.SUCCESS.getState()) {
                     map.put("success", true);
                 } else {
                     map.put("success", false);
-                    map.put("errMsg", "Fail to add image");
+                    map.put("errMsg", "Fail to add product");
                 }
             } catch (ProductOperationException e) {
                 map.put("success", false);
@@ -118,8 +121,6 @@ public class ProductManagementController {
             map.put("success", false);
             map.put("errMsg", "Please input information of product");
         }
-
-
         return map;
     }
 
@@ -152,5 +153,107 @@ public class ProductManagementController {
 
     }
 
+    @PostMapping("/modification_product")
+    @ResponseBody
+    private Map<String, Object> modifyProduct(HttpServletRequest request){
+        Map<String, Object> map = new HashMap<>();
 
+        String s = HttpServletRequestUtil.getString(request, "verifyCode");
+        if (!CodeUtil.checkVerifyCode(request)) {
+            map.put("success", false);
+            map.put("errMsg", "验证码错误");
+            return map;
+        }
+
+        String productStr = HttpServletRequestUtil.getString(request, "productStr");
+        // JSON -> POJO
+        ObjectMapper objectMapper = new ObjectMapper();
+        Product product = null;
+        try {
+            product = objectMapper.readValue(productStr, Product.class);
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("errMsg", e.getMessage());
+            return map;
+        }
+
+        List<File> productImgList = new ArrayList<>();
+
+        CommonsMultipartFile thumbnail = null;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        if (commonsMultipartResolver.isMultipart(request)) {
+            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+
+            //get thumbnail of product
+            thumbnail = (CommonsMultipartFile) multipartHttpServletRequest.getFile("thumbnail");
+
+            //get detail image of product
+            for (int i = 0; i < IMAGEMAXCOUNT; i++) {
+                CommonsMultipartFile productImg = (CommonsMultipartFile) multipartHttpServletRequest.getFile("productImg" + i);
+                if (productImg != null) {
+                    productImgList.add(ImageUtil.transferCommonsMultipartFileToFile(productImg));
+                } else {
+                    break;
+                }
+            }
+        } else {
+            map.put("success", false);
+            map.put("errMsg", "Upload image can't be null");
+            return map;
+        }
+
+        if (product != null && thumbnail != null && productImgList.size() > 0) {
+            try {
+                // get current shop form session in order to decrease dependency to the data coming from front end
+                Shop shop = (Shop) request.getSession().getAttribute("currentShop");
+                product.setShop(shop);
+
+                ProductExecution productExecution = productBiz.modifyProduct(product, ImageUtil.transferCommonsMultipartFileToFile(thumbnail), productImgList);
+                if (productExecution != null && productExecution.getState() == ProductStateEnum.SUCCESS.getState()) {
+                    map.put("success", true);
+                } else {
+                    map.put("success", false);
+                    map.put("errMsg", "Fail to modify product");
+                }
+            } catch (ProductOperationException e) {
+                map.put("success", false);
+                map.put("errMsg", e.getMessage());
+                return map;
+            }
+        } else {
+            map.put("success", false);
+            map.put("errMsg", "Please input information of product");
+        }
+        return map;
+    }
+
+    @GetMapping("/product_list")
+    @ResponseBody
+    private Map<String, Object> getProductListByShop(HttpServletRequest request){
+        Map<String, Object> map = new HashMap<>();
+
+        Product product = new Product();
+        Shop shop = (Shop) request.getSession().getAttribute("currentShop");
+        product.setShop(shop);
+
+        int pageNum = HttpServletRequestUtil.getInt(request, "pageNum");
+        if (pageNum > 0){
+            try {
+                PageHelper.startPage(pageNum, 10);
+                Page<Product> productPage = (Page<Product>) productBiz.getProductList(product);
+                PageInfo pageInfo = new PageInfo<>(productPage);
+
+                map.put("productList", pageInfo);
+                map.put("success", true);
+            }catch (Exception e){
+                map.put("success", false);
+                map.put("errMsg", e.getMessage());
+            }
+        }else {
+            map.put("success", false);
+            map.put("errMsg:","Fail to get product list");
+        }
+
+        return map;
+    }
 }

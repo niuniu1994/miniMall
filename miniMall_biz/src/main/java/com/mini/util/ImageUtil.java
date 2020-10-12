@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -57,8 +56,41 @@ public class ImageUtil {
                     .outputQuality(0.7f).toFile(dest);
         } catch (IOException e) {
             log.error(e.toString());
+            throw new RuntimeException("创建缩图片失败：" + e.toString());
+
+        }
+        return relativeAddr;
+    }
+
+
+    public static String generateNormalImg(File thumbnail, String targetAddr)  {
+        // 获取不重复的随机名
+        String realFileName = getRandomFileName();
+        // 获取文件的扩展名如png,jpg等
+        String extension = getExtensionName(thumbnail);
+        // 如果目标路径不存在，则自动创建
+        try {
+            makeDirPath(targetAddr);
+        }catch (IOException e){
+            log.error("IOException : " + e.toString());
             e.printStackTrace();
         }
+        // 获取文件存储的相对路径(带文件名)
+        String relativeAddr = targetAddr + realFileName + extension;
+        log.debug("current relativeAddr is :" + relativeAddr);
+        // 获取文件要保存到的目标路径
+        File dest = new File(PathUtil.getImgBasePath() + relativeAddr);
+        log.debug("current complete addr is :" + PathUtil.getImgBasePath() + relativeAddr);
+        // 调用Thumbnails生成带有水印的图片
+        try {
+            Thumbnails.of(thumbnail).size(337, 640)
+                    .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "/watermark.jpg")), 0.25f)
+                    .outputQuality(0.9f).toFile(dest);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new RuntimeException("创建缩图片失败：" + e.toString());
+        }
+        // 返回图片相对路径地址
         return relativeAddr;
     }
 
@@ -126,5 +158,7 @@ public class ImageUtil {
             fileOrFolder.delete();
         }
     }
+
+
 
 }

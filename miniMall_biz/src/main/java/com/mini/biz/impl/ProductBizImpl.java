@@ -3,7 +3,6 @@ package com.mini.biz.impl;
 import com.mini.biz.ProductBiz;
 import com.mini.dao.ProductDao;
 import com.mini.dao.ProductImgDao;
-import com.mini.dto.ImageHolder;
 import com.mini.dto.ProductExecution;
 import com.mini.entity.Product;
 import com.mini.entity.ProductImg;
@@ -35,8 +34,8 @@ public class ProductBizImpl implements ProductBiz {
     private ProductImgDao productImgDao;
 
     @Override
-    public ProductExecution getProductList(Product productCondition, int pageIndex, int pageSize) {
-        return null;
+    public List<Product> getProductList(Product product) {
+        return productDao.queryProductList(product);
     }
 
     @Override
@@ -83,8 +82,40 @@ public class ProductBizImpl implements ProductBiz {
     }
 
     @Override
-    public ProductExecution modifyProduct(Product product, File thumbnail, List<ImageHolder> productImgHolderList) throws ProductOperationException {
-        return null;
+    public ProductExecution modifyProduct(Product product, File thumbnail, List<File> productImgList) throws ProductOperationException {
+        if (product == null || product.getProductId() <= 0 || product.getShop().getShopId() <=0){
+            return new ProductExecution(ProductStateEnum.EMPTY);
+        }
+
+        product.setLastEditTime(new Date());
+        try {
+            if (thumbnail != null){
+                Product tmp = productDao.queryProductById(product.getProductId());
+                if (tmp.getImgAddr() != null){
+                    ImageUtil.deleteFileOrPath(tmp.getImgAddr());
+                }
+                addImage(product,thumbnail);
+            }
+
+            if (productImgList != null && !productImgList.isEmpty()){
+                List<ProductImg> list = productImgDao.queryProductImgList(product.getProductId());
+                if (!list.isEmpty()){
+                    deleteProductImgList(product.getProductId());
+                }
+                addProductImgList(productImgList,product);
+            }
+
+            int effectedNum = productDao.updateProduct(product);
+            if (effectedNum <= 0){
+                throw new ProductOperationException("Fail to update product");
+            }else {
+                product = productDao.queryProductById(product.getProductId());
+                return new ProductExecution(ProductStateEnum.SUCCESS, product);
+            }
+        }catch (Exception e){
+            throw new ProductOperationException("Update product error : " + e.getMessage());
+        }
+
     }
 
     private void addImage(Product product, File file) {
@@ -93,14 +124,14 @@ public class ProductBizImpl implements ProductBiz {
         product.setImgAddr(productImgAddr);
     }
 
-    private void addProductImgList(List<File> list, Product product){
+    private void addProductImgList(List<File> list, Product product) throws ProductOperationException{
         String dest = PathUtil.getShopImgPath(product.getShop().getShopId());
         List<ProductImg> productImgList = new ArrayList<>();
 
         try {
             //store photo
             list.forEach(a->{
-                String imgAddr = ImageUtil.generateThumbnail(a, dest);
+                String imgAddr = ImageUtil.generateNormalImg(a, dest);
                 ProductImg productImg = new ProductImg();
                 productImg.setProductId(product.getProductId());
                 productImg.setCreateTime(new Date());
@@ -119,5 +150,19 @@ public class ProductBizImpl implements ProductBiz {
         }catch (Exception e){
             throw new ProductOperationException("Add productImg error : " + e.getMessage());
         }
+    }
+
+    /**
+     * 删除某个商品下的所有详情图
+     *
+     * @param productId
+     */
+    private void deleteProductImgList(long productId) {
+        // 根据productId获取原来的图片
+        List<ProductImg> productImgList = productImgDao.queryProductImgList(productId);
+        // 干掉原来的图片
+        productImgList.forEach(a -> ImageUtil.deleteFileOrPath(a.getImgAddr()));
+        // 删除数据库里原有图片的信息
+        productImgDao.deleteProductImgByProductId(productId);
     }
 }

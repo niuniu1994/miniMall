@@ -5,7 +5,6 @@ import com.mini.BaseTest;
 import com.mini.dto.ProductExecution;
 import com.mini.entity.Product;
 import com.mini.entity.ProductCategory;
-import com.mini.entity.ProductImg;
 import com.mini.entity.Shop;
 import com.mini.enums.ProductStateEnum;
 import org.junit.Assert;
@@ -56,6 +55,7 @@ public class ProductBizTest extends BaseTest {
 
         ProductExecution productExecution = productBiz.addProduct(product,file,list);
         Assert.assertEquals(productExecution.getState(),ProductStateEnum.SUCCESS.getState());
-
     }
+
+
 }

@@ -1,14 +1,13 @@
 package com.mini.biz.impl;
 
 import com.mini.biz.ProductCategoryBiz;
-import com.mini.biz.ShopCategoryBiz;
 import com.mini.dao.ProductCategoryDao;
+import com.mini.dao.ProductDao;
 import com.mini.dto.ProductCategoryExecution;
 import com.mini.entity.ProductCategory;
-import com.mini.entity.Shop;
-import com.mini.entity.ShopCategory;
 import com.mini.enums.ProductCategoryStateEnum;
 import com.mini.exception.ProductCategoryOperationException;
+import com.mini.exception.ProductOperationException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +27,9 @@ public class ProductCategoryBizImpl implements ProductCategoryBiz {
     @Resource
     ProductCategoryDao productCategoryDao;
 
+    @Resource
+    ProductDao productDao;
+
     @Override
     public List<ProductCategory> getProductCategory(long shopId) {
         return productCategoryDao.selectByShopId(shopId);
@@ -37,7 +39,7 @@ public class ProductCategoryBizImpl implements ProductCategoryBiz {
     public ProductCategoryExecution batchAddProductCategory(List<ProductCategory> productCategoryList) throws ProductCategoryOperationException {
         if (productCategoryList != null && productCategoryList.size() > 0) {
             try {
-                productCategoryList.forEach(a->a.setCreateTime(new Date()));
+                productCategoryList.forEach(a -> a.setCreateTime(new Date()));
                 int effectedNum = productCategoryDao.batchInsertProductCategory(productCategoryList);
                 if (effectedNum <= 0) {
                     throw new ProductCategoryOperationException("店铺类别创建失败");
@@ -54,16 +56,21 @@ public class ProductCategoryBizImpl implements ProductCategoryBiz {
     }
 
     @Override
-    public ProductCategoryExecution removeProductCategory(long productCategoryId,long shopId) throws ProductCategoryOperationException {
-        //TODO reset product's id that was in the deleted category
+    public ProductCategoryExecution removeProductCategory(long productCategoryId, long shopId) throws ProductCategoryOperationException {
+        try {
+            int effectedNum1 = productDao.updateProductCategoryToNull(productCategoryId);
+        } catch (Exception e) {
+            throw new ProductOperationException("deleteProductCategory error" + e.getMessage());
+        }
+
         try {
             int effectedNum = productCategoryDao.deleteProductCategory(productCategoryId, shopId);
-            if (effectedNum <= 0){
+            if (effectedNum <= 0) {
                 throw new ProductCategoryOperationException("商品类别删除失败");
-            }else {
+            } else {
                 return new ProductCategoryExecution(ProductCategoryStateEnum.SUCCESS);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ProductCategoryOperationException("deleteProductCategory error" + e.getMessage());
         }
     }

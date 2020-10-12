@@ -2,7 +2,8 @@ package com.mini.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mini.BaseTest;
+
+import com.mini.BaseDaoTest;
 import com.mini.entity.Area;
 import com.mini.entity.PersonInfo;
 import com.mini.entity.Shop;
@@ -20,7 +21,7 @@ import java.util.List;
  * @author: xin
  * @create: 2020-09-25 23:19
  **/
-public class ShopDaoTest extends BaseTest {
+public class ShopDaoTest extends BaseDaoTest {
     @Resource
     ShopDao shopDao;
 
