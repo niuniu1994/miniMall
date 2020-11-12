@@ -7,7 +7,8 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="com.mini.dao"/>
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
 
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -23,10 +24,23 @@
     </bean>
 
 
+
     <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="com.mini.entity"/>
         <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helpDialect = mysql
+                            reasonable = false
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

@@ -26,5 +26,4 @@ public class ShopLoginInterceptor implements HandlerInterceptor {
         return false;
     }
 
-
 }

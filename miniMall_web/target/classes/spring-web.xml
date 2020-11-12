@@ -23,8 +23,8 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <context:component-scan base-package="com.mini.controller"/>
-<!--    -->
-    <mvc:resources mapping="/resources/**" location="classpath:/resources/" />
+    <!--    -->
+    <mvc:resources mapping="/resources/**" location="classpath:/resources/"/>
     <mvc:default-servlet-handler/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -32,5 +32,33 @@
         <property name="suffix" value=".html"/>
     </bean>
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSize" value="20971520"/>
+        <property name="maxInMemorySize" value="20971520"/>
+    </bean>
+
+    <mvc:interceptors>
+        <!-- 校验是否已登录了店家管理系统的拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/shop_admin/**"/>
+            <bean id="ShopInterceptor" class="com.mini.interceptors.ShopLoginInterceptor"/>
+        </mvc:interceptor>
+        <!-- 校验是否对该店铺有操作权限的拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/shop_admin/**"/>
+            <!-- shoplist page -->
+            <mvc:exclude-mapping path="/shop_admin/shop_list"/>
+            <mvc:exclude-mapping path="/shop_admin/get_shop_list"/>
+            <!-- shopregister page -->
+            <mvc:exclude-mapping path="/shop_admin/shop_init_info"/>
+            <mvc:exclude-mapping path="/shop_admin/registration_shop"/>
+            <mvc:exclude-mapping path="/shop_admin/shop_operation"/>
+            <!-- shopmanage page -->
+            <mvc:exclude-mapping path="/shop_admin/shop_management_info"/>
+            <mvc:exclude-mapping path="/shop_admin/shop_management"/>
+            <bean id="ShopPermissionInterceptor"  class="com.mini.interceptors.ShopPermissionInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>

@@ -30,7 +30,7 @@ $(function () {
             dataType: 'json',
             type: 'get',
             success: function (data) {
-                let shop = data.shopInfo
+                let shop = data.shopInfo;
                 $('#shop-cover-pic').attr('src', shop.shopImg);
                 $('#shop-update-time').html(
                     new Date(shop.lastEditTime)

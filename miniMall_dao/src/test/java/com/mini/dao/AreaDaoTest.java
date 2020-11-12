@@ -25,8 +25,6 @@ public class AreaDaoTest{
 
     @Test
     public void testSelectAll(){
-        List<Area> list = areaDao.selectAll();
-        Assert.assertEquals(2,list.size());
 
     }
 }

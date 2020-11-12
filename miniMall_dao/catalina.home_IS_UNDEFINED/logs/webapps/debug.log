@@ -1,6 +1,3 @@
-2020-09-26 10:22:54:533 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_des = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
-2020-09-26 10:25:01:685 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_des = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
-2020-09-26 10:25:01:712 [main] DEBUG com.mini.dao.ShopDao.update - ==> Parameters: 测试update(String), testupdate(String), 2020-09-26 10:25:01.315(Timestamp), 1(Integer), test(String), 12(Long), 42(Long)
-2020-09-26 10:25:38:952 [main] DEBUG com.mini.dao.ShopDao.update - ==>  Preparing: update tb_shop SET shop_name = ?, shop_desc = ?, last_edit_time = ?, enable_status = ?, advice = ?, shop_Category_id = ? where shop_id = ?
-2020-09-26 10:25:38:977 [main] DEBUG com.mini.dao.ShopDao.update - ==> Parameters: 测试update(String), testupdate(String), 2020-09-26 10:25:38.593(Timestamp), 1(Integer), test(String), 12(Long), 42(Long)
-2020-09-26 10:25:38:984 [main] DEBUG com.mini.dao.ShopDao.update - <==    Updates: 1
+2020-10-27 22:54:47:922 [main] DEBUG com.mini.dao.ProductDao.queryProductList - ==>  Preparing: select p.*, ts.shop_id, ts.shop_name, tpc.product_category_id, tpc.product_category_name from tb_product p left join tb_product_category tpc on tpc.product_category_id = p.product_category_id left join tb_shop ts on p.shop_id = ts.shop_id WHERE p.shop_id = ? and tpc.product_category_id = ? order by priority desc
+2020-10-27 22:54:47:957 [main] DEBUG com.mini.dao.ProductDao.queryProductList - ==> Parameters: 20(Long), 15(Long)
+2020-10-27 22:54:48:002 [main] DEBUG com.mini.dao.ProductDao.queryProductList - <==      Total: 0

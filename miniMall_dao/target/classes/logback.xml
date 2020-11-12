@@ -5,6 +5,7 @@
     <property name="log.filePath" value="${catalina.home}/logs/webapps"/>
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{50} - %msg%n"/>
 
+<!--    appender 决定log的输出地址和方式和格式等 console file stream等-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${log.pattern}</pattern>
